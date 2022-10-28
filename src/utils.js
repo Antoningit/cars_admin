@@ -1,28 +1,50 @@
-import { SERVER_HOST } from "./constants";
+import {
+  SERVER_HOST,
+  CarBodysValues,
+  CarsEnginesValues,
+  CarsDrivesValues,
+  CarsKppsValues,
+  CarsTitles,
+  CarsWheelsValues,
+} from "./constants";
 
 export const resolveMappedData = (data) => {
   return data.map((car) => {
-    const image = `${SERVER_HOST}${car.image}`;
     return {
       ...car,
-      newImage: image,
-      newImages: JSON.parse(car.images).map(
-        (image) => `${SERVER_HOST}${image}`
-      ),
-      engine: car.car_engine,
+      body: CarBodysValues[car.body],
+      drive: CarsDrivesValues[car.drive],
+      kpp: CarsKppsValues[car.kpp],
+      title: CarsTitles[car.title],
+      wheel: CarsWheelsValues[car.wheel],
+      newImage: `${SERVER_HOST}uploads/${car.image}`,
+      newImages: car.images.map((image) => `${SERVER_HOST}uploads/${image}`),
+      engine: CarsEnginesValues[car.car_engine],
       mod: car.car_mod,
+      auction: car.auction ? "Да" : "Нет",
+      latest: car.latest ? "Да" : "Нет",
+      promo: car.promo ? "Да" : "Нет",
+      year_from: String(car.year_from),
+      owners_by_pts: String(car.owners_by_pts),
     };
   });
 };
 
 export const resolveMappedCar = (car) => {
-  const image = `${SERVER_HOST}${car.image}`;
-  car.newImage = image;
-  car.newImages = JSON.parse(car.images).map(
-    (image) => `${SERVER_HOST}${image}`
-  );
-  car.engine = car.car_engine;
+  car.body = CarBodysValues[car.body];
+  car.drive = CarsDrivesValues[car.drive];
+  car.kpp = CarsKppsValues[car.kpp];
+  car.title = CarsTitles[car.title];
+  car.wheel = CarsWheelsValues[car.wheel];
+  car.newImage = `${SERVER_HOST}uploads/${car.image}`;
+  car.newImages = car.images.map((image) => `${SERVER_HOST}uploads/${image}`);
+  car.engine = CarsEnginesValues[car.car_engine];
   car.mod = car.car_mod;
+  car.auction = car.auction ? "Да" : "Нет";
+  car.latest = car.latest ? "Да" : "Нет";
+  car.promo = car.promo ? "Да" : "Нет";
+  car.year_from = String(car.year_from);
+  car.owners_by_pts = String(car.owners_by_pts);
   return car;
 };
 

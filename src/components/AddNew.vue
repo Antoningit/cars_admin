@@ -157,7 +157,13 @@ import {
   CarsPtss,
   CarsOwnersByPtss,
   CarsCustoms,
-  SERVER_HOST
+  SERVER_HOST,
+  CarBodysValues,
+  CarsEnginesValues,
+  CarsDrivesValues,
+  CarsKppsValues,
+  CarsTitles,
+  CarsWheelsValues,
 } from "../constants";
 import { resolveMappedCar } from "../utils";
 export default {
@@ -190,6 +196,8 @@ export default {
         carPromo: "",
         carDescription: "",
       },
+      photoLink: "",
+      photoLinks: [],
     };
   },
   computed: {
@@ -234,13 +242,13 @@ export default {
     },
   },
   methods: {
-    submit() {
+    async submit() {
       const isValid = this.$refs.form.validate();
       if (!isValid) {
         return;
       }
-      const formData = new FormData();
-      formData.append("title", this.car.carTitle);
+      const formDataOne = new FormData();
+      /* formData.append("title", this.car.carTitle);
       formData.append("model", this.car.carModel);
       formData.append("engine", this.car.carEngine);
       formData.append("kpp", this.car.carKpp);
@@ -260,15 +268,82 @@ export default {
       formData.append("auction", this.car.carAuction);
       formData.append("latest", this.car.carLatest);
       formData.append("promo", this.car.carPromo);
-      formData.append("description", this.car.carDescription);
-      formData.append("file_first", this.car.carImg);
-      this.car.carImgs.forEach((file) => {
+      formData.append("description", this.car.carDescription); */
+      formDataOne.append("file", this.car.carImg);
+      /* this.car.carImgs.forEach((file) => {
         formData.append("file", file);
-      });
-      this.axios
-        .post(`${SERVER_HOST}createcar`, formData)
+      }); */
+      const photoLinkRes = await this.axios.post(
+        `${SERVER_HOST}api/photo`,
+        formDataOne
+      );
+      const photoLink = photoLinkRes.data.filename;
+      this.photoLink = photoLink;
+      /* this.axios
+        .post(`${SERVER_HOST}api/photo`, formDataOne)
         .then((res) => {
           if (res.status === 200) {
+            this.photoLink = res.data.filename;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        }); */
+      const photoLinksRes = await Promise.all(
+        this.car.carImgs.map((file) => {
+          const formData = new FormData();
+          formData.append("file", file);
+          return this.axios.post(`${SERVER_HOST}api/photo`, formData);
+        })
+      );
+      const photoLinks = photoLinksRes.map(
+        ({ data: { filename } }) => filename
+      );
+      this.photoLinks = photoLinks;
+      /* this.car.carImgs.forEach((file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        this.axios
+          .post(`${SERVER_HOST}api/photo`, formData)
+          .then((res) => {
+            if (res.status === 200) {
+              this.photoLinks.push(res.data.filename);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }); */
+      const data = {
+        image: this.photoLink,
+        images: this.photoLinks,
+        auction: this.car.carAuction === "Да",
+        body: CarBodysValues.indexOf(this.car.carBody),
+        car_engine: CarsEnginesValues.indexOf(this.car.carEngine),
+        car_mod: this.car.carMod,
+        color: this.car.carColor,
+        customs: this.car.carCustoms,
+        drive: CarsDrivesValues.indexOf(this.car.carDrive),
+        engine_volume: this.car.carEngineVolume,
+        kpp: CarsKppsValues.indexOf(this.car.carKpp),
+        latest: this.car.carLatest === "Да",
+        mileage: Number(this.car.carMileage),
+        model: this.car.carModel,
+        old_price: Number(this.car.carOldPrice),
+        owners_by_pts: this.car.carOwnersByPts,
+        price: Number(this.car.carPrice),
+        promo: this.car.carPromo === "Да",
+        pts: this.car.carPts,
+        title: CarsTitles.indexOf(this.car.carTitle),
+        wheel: CarsWheelsValues.indexOf(this.car.carWheel),
+        year_from: Number(this.car.carYearFrom),
+        description: this.car.carDescription,
+      };
+      this.axios
+        .post(`${SERVER_HOST}api/car`, data)
+        .then((res) => {
+          if (res.status === 200) {
+            console.log(res.data);
             console.log("ok");
             const mappedCar = resolveMappedCar(res.data.car);
             this.$store.dispatch("pushCarOnFrontend", mappedCar);

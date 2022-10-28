@@ -125,9 +125,19 @@ export default {
     changeCar(id) {
       this.$router.push(`/changecar/${id}`);
     },
-    deleteCar(car) {
+    async deletePhotos(image, images) {
+      const arr = [image, ...images];
+      const imagesDeleted = await Promise.all(
+        arr.map((link) => {
+          return this.axios.delete(`${SERVER_HOST}api/photo/${link}`);
+        })
+      );
+      return imagesDeleted;
+    },
+    async deleteCar(car) {
+      await this.deletePhotos(car.image, car.images);
       this.axios
-        .post(`${SERVER_HOST}deletecar`, { car })
+        .delete(`${SERVER_HOST}api/car/${car.id}`)
         .then((res) => {
           console.log(res);
           if (res.status === 200) {

@@ -109,12 +109,12 @@
           ></v-select>
           <v-text-field v-model="car.customs" label="Таможня" :rules="allRules">
           </v-text-field>
-          <v-text-field
+          <v-select
             v-model="car.owners_by_pts"
+            :items="carsOwnersByPtss"
             label="Владельцев по Птс"
             :rules="allRules"
-          >
-          </v-text-field>
+          ></v-select>
           <v-select
             v-model="car.auction"
             :items="carsAuctions"
@@ -156,7 +156,14 @@ import {
   CarsAuctions,
   CarsLatests,
   CarsPromos,
-  SERVER_HOST
+  CarsOwnersByPtss,
+  SERVER_HOST,
+  CarBodysValues,
+  CarsEnginesValues,
+  CarsDrivesValues,
+  CarsKppsValues,
+  CarsTitles,
+  CarsWheelsValues,
 } from "../constants";
 import { resolveMappedCar, getCar } from "../utils";
 export default {
@@ -165,6 +172,8 @@ export default {
       allRules: [(v) => !!v || "Поле обязательно"],
       valid: true,
       car: null,
+      photoLink: "",
+      photoLinks: [],
     };
   },
   async created() {
@@ -176,6 +185,9 @@ export default {
   computed: {
     cars() {
       return this.$store.getters.CARS;
+    },
+    carsOwnersByPtss() {
+      return Object.values(CarsOwnersByPtss);
     },
     carsTitles() {
       return Object.values(CarsTitlesWithImgs).map(({ title }) => title);
@@ -209,13 +221,132 @@ export default {
     },
   },
   methods: {
-    submit() {
+    resolveData() {
+      if (
+        typeof this.car.image !== "string" &&
+        this.car.images.some((link) => typeof link !== "string")
+      ) {
+        console.log(3);
+        return {
+          id: this.car.id,
+          image: this.photoLink,
+          images: this.photoLinks,
+          auction: this.car.auction === "Да",
+          body: CarBodysValues.indexOf(this.car.body),
+          car_engine: CarsEnginesValues.indexOf(this.car.engine),
+          car_mod: this.car.mod,
+          color: this.car.color,
+          customs: this.car.customs,
+          drive: CarsDrivesValues.indexOf(this.car.drive),
+          engine_volume: this.car.engine_volume,
+          kpp: CarsKppsValues.indexOf(this.car.kpp),
+          latest: this.car.latest === "Да",
+          mileage: Number(this.car.mileage),
+          model: this.car.model,
+          old_price: Number(this.car.old_price),
+          owners_by_pts: this.car.owners_by_pts,
+          price: Number(this.car.price),
+          promo: this.car.promo === "Да",
+          pts: this.car.pts,
+          title: CarsTitles.indexOf(this.car.title),
+          wheel: CarsWheelsValues.indexOf(this.car.wheel),
+          year_from: Number(this.car.year_from),
+          description: this.car.description,
+        };
+      }
+      if (typeof this.car.image !== "string") {
+        console.log(1);
+        return {
+          id: this.car.id,
+          image: this.photoLink,
+          images: this.car.images,
+          auction: this.car.auction === "Да",
+          body: CarBodysValues.indexOf(this.car.body),
+          car_engine: CarsEnginesValues.indexOf(this.car.engine),
+          car_mod: this.car.mod,
+          color: this.car.color,
+          customs: this.car.customs,
+          drive: CarsDrivesValues.indexOf(this.car.drive),
+          engine_volume: this.car.engine_volume,
+          kpp: CarsKppsValues.indexOf(this.car.kpp),
+          latest: this.car.latest === "Да",
+          mileage: Number(this.car.mileage),
+          model: this.car.model,
+          old_price: Number(this.car.old_price),
+          owners_by_pts: this.car.owners_by_pts,
+          price: Number(this.car.price),
+          promo: this.car.promo === "Да",
+          pts: this.car.pts,
+          title: CarsTitles.indexOf(this.car.title),
+          wheel: CarsWheelsValues.indexOf(this.car.wheel),
+          year_from: Number(this.car.year_from),
+          description: this.car.description,
+        };
+      }
+      if (this.car.images.some((link) => typeof link !== "string")) {
+        console.log(2);
+        return {
+          id: this.car.id,
+          image: this.car.image,
+          images: this.photoLinks,
+          auction: this.car.auction === "Да",
+          body: CarBodysValues.indexOf(this.car.body),
+          car_engine: CarsEnginesValues.indexOf(this.car.engine),
+          car_mod: this.car.mod,
+          color: this.car.color,
+          customs: this.car.customs,
+          drive: CarsDrivesValues.indexOf(this.car.drive),
+          engine_volume: this.car.engine_volume,
+          kpp: CarsKppsValues.indexOf(this.car.kpp),
+          latest: this.car.latest === "Да",
+          mileage: Number(this.car.mileage),
+          model: this.car.model,
+          old_price: Number(this.car.old_price),
+          owners_by_pts: this.car.owners_by_pts,
+          price: Number(this.car.price),
+          promo: this.car.promo === "Да",
+          pts: this.car.pts,
+          title: CarsTitles.indexOf(this.car.title),
+          wheel: CarsWheelsValues.indexOf(this.car.wheel),
+          year_from: Number(this.car.year_from),
+          description: this.car.description,
+        };
+      }
+      console.log(4);
+      return {
+        id: this.car.id,
+        image: this.car.image,
+        images: this.car.images,
+        auction: this.car.auction === "Да",
+        body: CarBodysValues.indexOf(this.car.body),
+        car_engine: CarsEnginesValues.indexOf(this.car.engine),
+        car_mod: this.car.mod,
+        color: this.car.color,
+        customs: this.car.customs,
+        drive: CarsDrivesValues.indexOf(this.car.drive),
+        engine_volume: this.car.engine_volume,
+        kpp: CarsKppsValues.indexOf(this.car.kpp),
+        latest: this.car.latest === "Да",
+        mileage: Number(this.car.mileage),
+        model: this.car.model,
+        old_price: Number(this.car.old_price),
+        owners_by_pts: this.car.owners_by_pts,
+        price: Number(this.car.price),
+        promo: this.car.promo === "Да",
+        pts: this.car.pts,
+        title: CarsTitles.indexOf(this.car.title),
+        wheel: CarsWheelsValues.indexOf(this.car.wheel),
+        year_from: Number(this.car.year_from),
+        description: this.car.description,
+      };
+    },
+    async submit() {
       const isValid = this.$refs.form.validate();
       if (!isValid) {
         return;
       }
-      const formData = new FormData();
-      formData.append("title", this.car.title);
+      const formDataOne = new FormData();
+      /* formData.append("title", this.car.title);
       formData.append("id", this.car.id);
       formData.append("model", this.car.model);
       formData.append("engine", this.car.engine);
@@ -244,8 +375,32 @@ export default {
         ? this.car.images.forEach((file) => {
             formData.append("file", file);
           })
-        : formData.append("images", this.car.images);
+        : formData.append("images", this.car.images); */
 
+      if (typeof this.car.image !== "string") {
+        formDataOne.append("file", this.car.image);
+        const photoLinkRes = await this.axios.post(
+          `${SERVER_HOST}api/photo`,
+          formDataOne
+        );
+        const photoLink = photoLinkRes.data.filename;
+        this.photoLink = photoLink;
+      }
+      let photoLinksRes = [];
+      if (this.car.images.some((link) => typeof link !== "string")) {
+        photoLinksRes = await Promise.all(
+          this.car.images.map((file) => {
+            const formData = new FormData();
+            formData.append("file", file);
+            return this.axios.post(`${SERVER_HOST}api/photo`, formData);
+          })
+        );
+        const photoLinks = photoLinksRes.map(
+          ({ data: { filename } }) => filename
+        );
+        this.photoLinks = photoLinks;
+        console.log(this.photoLinks);
+      }
       /* this.car.images.forEach((file) => {
         const arr = [];
         if (typeof file !== "string") {
@@ -255,12 +410,14 @@ export default {
         arr.push(file);
         formData.append("images", JSON.stringify(arr));
       }); */
+      const data = this.resolveData();
+      console.log(data);
       this.axios
-        .post(`${SERVER_HOST}changecar`, formData)
+        .post(`${SERVER_HOST}api/car`, data)
         .then((res) => {
           if (res.status === 200) {
             console.log("ok");
-            const mappedCar = resolveMappedCar(res.data.car);
+            const mappedCar = resolveMappedCar(res.data);
             this.$store.dispatch("changeCarOnFrontend", mappedCar);
             this.$router.push("/");
           }

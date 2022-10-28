@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import { resolveMappedData } from "../utils";
-import {SERVER_HOST} from '../constants' 
+import { SERVER_HOST } from "../constants";
 Vue.use(Vuex);
 Vue.use(VueAxios, axios);
 
@@ -20,7 +20,7 @@ export default new Vuex.Store({
       state.cars = state.cars.filter(({ id }) => id !== payload);
     },
     CHANGE_CAR_ON_FRONTEND: (state, payload) => {
-      console.log(payload);
+      // console.log(payload);
       state.cars = state.cars.map((entry) =>
         Number(entry.id) === Number(payload.id) ? payload : entry
       );
@@ -31,7 +31,7 @@ export default new Vuex.Store({
   },
   actions: {
     async getCars({ commit }) {
-      const res = await fetch(`${SERVER_HOST}getcars`);
+      const res = await fetch(`${SERVER_HOST}api/car`);
       const data = await res.json();
       const mappedData = resolveMappedData(data);
       commit("SET_CARS", mappedData);
@@ -51,11 +51,11 @@ export default new Vuex.Store({
     },
     login({ commit }, { login, password }) {
       const isLoggedIn = axios
-        .post(`${SERVER_HOST}login`, { login, password })
+        .post(`${SERVER_HOST}api/login`, { login, password })
         .then((res) => {
           if (res.status === 200) {
             commit("SET_USER", true);
-            localStorage.setItem("token", res.data.token);
+            //localStorage.setItem("token", res.data.token);
             return true;
           }
           return false;
@@ -66,7 +66,7 @@ export default new Vuex.Store({
         });
       return isLoggedIn;
     },
-    auth({ commit }) {
+    /* auth({ commit }) {
       const isLoggedIn = axios
         .get(`${SERVER_HOST}auth`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -85,7 +85,7 @@ export default new Vuex.Store({
           return false;
         });
       return isLoggedIn;
-    },
+    }, */
   },
   getters: {
     CARS: (state) => {

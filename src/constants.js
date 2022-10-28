@@ -301,6 +301,69 @@ export const CarsTitlesWithImgs = Object.freeze({
   },
 });
 
+export const CarsTitles = [
+  "Acura",
+  "Audi",
+  "BMW",
+  "Brilliance",
+  "Buick",
+  "BYD",
+  "Cadillac",
+  "Changan ",
+  "Chery",
+  "Chevrolet",
+  "Chrysler",
+  "Citroen",
+  "Daewoo ",
+  "Datsun",
+  "Dodge ",
+  "DongFeng",
+  "DW Hower",
+  "FAW",
+  "Fiat",
+  "Ford",
+  "GEELY ",
+  "Great Wall",
+  "Haima",
+  "Haval",
+  "Honda",
+  "Hyundai",
+  "Infiniti",
+  "IVECO",
+  "JAC",
+  "Jaguar",
+  "Jeep ",
+  "Kia",
+  "Lada",
+  "Land Rover",
+  "Lexus",
+  "Lifan",
+  "Luxgen ",
+  "Mazda",
+  "Mercedes",
+  "MINI",
+  "Mitsubishi",
+  "Nissan",
+  "Opel",
+  "Peugeot",
+  "Porsche",
+  "Ravon",
+  "Renault",
+  "Seat",
+  "Skoda",
+  "Ssang Yong",
+  "Subaru",
+  "Suzuki",
+  "Toyota",
+  "Volkswagen",
+  "Volvo",
+  "Vortex",
+  "Zotye",
+  "Газель",
+  "ЗАЗ",
+  "УАЗ",
+];
+
 export const CarsEngines = Object.freeze({
   BENZIN: "Бензин",
   DIZEL: "Дизель",
@@ -309,12 +372,16 @@ export const CarsEngines = Object.freeze({
   GIBRID: "Гибрид",
 });
 
+export const CarsEnginesValues = Object.values(CarsEngines);
+
 export const CarsKpps = Object.freeze({
   AUTOMAT: "Автомат",
   AUTOMAT_VARIATOR: "Автомат вариатор",
   AUTOMAT_ROBOT: "Автомат робот",
   HAND: "Механическая",
 });
+
+export const CarsKppsValues = Object.values(CarsKpps);
 
 export const CarsBodys = Object.freeze({
   BORTOVOY_GRUZOVIK: "Бортовой грузовик",
@@ -336,6 +403,8 @@ export const CarsBodys = Object.freeze({
   HATCHBACK: "Хэтчбэк",
   FURGON_METAL: "Цельнометаллический фургон",
 });
+
+export const CarBodysValues = Object.values(CarsBodys);
 
 export const CarsYearFroms = Object.freeze({
   1997: "1997",
@@ -372,10 +441,14 @@ export const CarsDrives = Object.freeze({
   POLNIY: "Полный",
 });
 
+export const CarsDrivesValues = Object.values(CarsDrives);
+
 export const CarsWheels = Object.freeze({
   RIGHT: "Правый",
   LEFT: "Левый",
 });
+
+export const CarsWheelsValues = Object.values(CarsWheels);
 
 export const CarsCustoms = Object.freeze({
   RASTAMOZHEN: "Растаможен",
@@ -409,4 +482,4 @@ export const CarsPromos = Object.freeze({
   NO: "Нет",
 });
 
-export const SERVER_HOST = "http://localhost:3333/";
+export const SERVER_HOST = "/";
