@@ -345,7 +345,7 @@ export default {
           if (res.status === 200) {
             console.log(res.data);
             console.log("ok");
-            const mappedCar = resolveMappedCar(res.data.car);
+            const mappedCar = resolveMappedCar(res.data);
             this.$store.dispatch("pushCarOnFrontend", mappedCar);
             this.$router.push("/");
           }
