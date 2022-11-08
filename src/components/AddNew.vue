@@ -36,7 +36,17 @@
             label="Остальные фото"
             v-model="car.carImgs"
             :rules="allRules"
+            @change="addImagesToPreview"
           ></v-file-input>
+          <draggable
+            v-model="previewImgs"
+            class="d-flex flex-wrap"
+            @change="dragChange"
+          >
+            <v-col v-for="{ link } in previewImgs" :key="link">
+              <v-img :src="link" max-height="150" max-width="250"></v-img>
+            </v-col>
+          </draggable>
           <v-select
             v-model="car.carKpp"
             :items="carsKpps"
@@ -166,7 +176,9 @@ import {
   CarsWheelsValues,
 } from "../constants";
 import { resolveMappedCar } from "../utils";
+import draggable from "vuedraggable";
 export default {
+  components: { draggable },
   data() {
     return {
       allRules: [(v) => !!v || "Поле обязательно"],
@@ -198,6 +210,7 @@ export default {
       },
       photoLink: "",
       photoLinks: [],
+      previewImgs: [],
     };
   },
   computed: {
@@ -242,6 +255,19 @@ export default {
     },
   },
   methods: {
+    addImagesToPreview() {
+      this.previewImgs = this.car.carImgs.map((previewImg) => ({
+        link: URL.createObjectURL(previewImg),
+        name: previewImg.name,
+      }));
+    },
+    dragChange() {
+      const previewImgsLinks = this.previewImgs.map(({ name }) => name);
+      this.car.carImgs = this.car.carImgs.sort(
+        (a, b) =>
+          previewImgsLinks.indexOf(a.name) - previewImgsLinks.indexOf(b.name)
+      );
+    },
     async submit() {
       const isValid = this.$refs.form.validate();
       if (!isValid) {
