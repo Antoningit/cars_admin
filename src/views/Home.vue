@@ -16,41 +16,43 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col v-for="car in cars" :key="car.id" cols="3">
-          <v-card class="mx-auto" max-width="400">
-            <v-img
-              class="white--text align-end"
-              height="200px"
-              :src="car.newImage"
-            >
-              <v-card-title>{{ car.title }}</v-card-title>
-            </v-img>
+        <v-col v-for="(car, index) in cars" :key="car.id" cols="3">
+          <template v-if="index < 3">
+            <v-card class="mx-auto" max-width="400">
+              <v-img
+                class="white--text align-end"
+                height="200px"
+                :src="car.newImage"
+              >
+                <v-card-title>{{ car.title }}</v-card-title>
+              </v-img>
 
-            <v-card-subtitle>
-              {{ car.model }}
-            </v-card-subtitle>
+              <v-card-subtitle>
+                {{ car.model }}
+              </v-card-subtitle>
 
-            <v-card-text class="text--primary">
-              <v-row>
-                <v-col v-for="image in car.newImages" :key="image" cols="4">
-                  <v-img :src="image"> </v-img>
-                </v-col>
-              </v-row>
-              <div class="mt-3">{{ car.mod }}</div>
+              <v-card-text class="text--primary">
+                <v-row>
+                  <v-col v-for="image in car.newImages" :key="image" cols="4">
+                    <v-img :src="image"> </v-img>
+                  </v-col>
+                </v-row>
+                <div class="mt-3">{{ car.mod }}</div>
 
-              <div>{{ car.price }}</div>
-            </v-card-text>
+                <div>{{ car.price }}</div>
+              </v-card-text>
 
-            <v-card-actions>
-              <v-btn color="success" @click="changeCar(car.id)" text>
-                Изменить
-              </v-btn>
+              <v-card-actions>
+                <v-btn color="success" @click="changeCar(car.id)" text>
+                  Изменить
+                </v-btn>
 
-              <v-btn color="error" text @click="deleteCar(car)">
-                Удалить
-              </v-btn>
-            </v-card-actions>
-          </v-card>
+                <v-btn color="error" text @click="deleteCar(car)">
+                  Удалить
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
           <!-- <button @click="getUsers">fetch data</button>
           <div v-if="users.length > 0">
             <div style="display: flex" v-for="user in users" :key="user.id">
