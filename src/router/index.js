@@ -1,5 +1,5 @@
 import Vue from "vue";
-import store from "../store/index";
+//import store from "../store/index";
 import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
@@ -54,7 +54,7 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+/* router.beforeEach((to, from, next) => {
   const requiredAuth = to.matched.some((record) => record.meta.requiresAuth);
   //const isToken = localStorage.getItem("token") != null;
   const isLoggedIn = store.getters.isLoggedIn;
@@ -63,6 +63,6 @@ router.beforeEach((to, from, next) => {
     return;
   }
   next();
-});
+}); */
 
 export default router;
