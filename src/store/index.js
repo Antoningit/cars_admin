@@ -4,6 +4,7 @@ import axios from "axios";
 import VueAxios from "vue-axios";
 import { resolveMappedData } from "../utils";
 import { SERVER_HOST } from "../constants";
+import { resolveIsAuth } from "../apiServices/ApiService";
 Vue.use(Vuex);
 Vue.use(VueAxios, axios);
 
@@ -51,26 +52,7 @@ export default new Vuex.Store({
     },
     login({ commit }, { login, password }) {
       const isLoggedIn = axios
-        .post(`${SERVER_HOST}api/login`, { login, password })
-        .then((res) => {
-          if (res.status === 200) {
-            commit("SET_USER", true);
-            //localStorage.setItem("token", res.data.token);
-            return true;
-          }
-          return false;
-        })
-        .catch((err) => {
-          console.error(err);
-          return false;
-        });
-      return isLoggedIn;
-    },
-    /* auth({ commit }) {
-      const isLoggedIn = axios
-        .get(`${SERVER_HOST}auth`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        })
+        .post(`${SERVER_HOST}/login`, { login, password })
         .then((res) => {
           if (res.status === 200) {
             commit("SET_USER", true);
@@ -81,11 +63,20 @@ export default new Vuex.Store({
         })
         .catch((err) => {
           console.error(err);
-          localStorage.removeItem("token");
           return false;
         });
       return isLoggedIn;
-    }, */
+    },
+    async auth({ commit }) {
+      const resolveAuthData = await resolveIsAuth();
+      const isLoggedIn = resolveAuthData?.status === 200;
+      if (isLoggedIn) {
+        commit("SET_USER", true);
+        localStorage.setItem("token", resolveAuthData.data.token);
+        return;
+      }
+      localStorage.removeItem("token");
+    },
   },
   getters: {
     CARS: (state) => {

@@ -482,4 +482,4 @@ export const CarsPromos = Object.freeze({
   NO: "Нет",
 });
 
-export const SERVER_HOST = "/";
+export const SERVER_HOST = "http://localhost:3333";

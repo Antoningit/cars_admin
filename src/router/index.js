@@ -1,6 +1,7 @@
 import Vue from "vue";
-//import store from "../store/index";
+// import store from "../store/index";
 import VueRouter from "vue-router";
+import { resolveIsAuth } from "../apiServices/ApiService";
 
 Vue.use(VueRouter);
 
@@ -54,15 +55,23 @@ const router = new VueRouter({
   routes,
 });
 
-/* router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const requiredAuth = to.matched.some((record) => record.meta.requiresAuth);
-  //const isToken = localStorage.getItem("token") != null;
-  const isLoggedIn = store.getters.isLoggedIn;
+  // возвращает всегда false, хотя в store.getters уже true
+  // const isLoggedIn = store.getters.isLoggedIn;
+  const resolveAuthData = await resolveIsAuth();
+  const isLoggedIn = resolveAuthData?.status === 200;
+  if (isLoggedIn) {
+    localStorage.setItem("token", resolveAuthData.data.token);
+    next();
+    return;
+  }
+  localStorage.removeItem("token");
   if (requiredAuth && !isLoggedIn) {
     next("/login");
     return;
   }
   next();
-}); */
+});
 
 export default router;

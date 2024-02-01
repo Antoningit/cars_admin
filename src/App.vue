@@ -50,7 +50,7 @@ export default {
     //
   }),
   async created() {
-    //await this.$store.dispatch("auth");
+    // await this.$store.dispatch("auth");
   },
 };
 </script>
